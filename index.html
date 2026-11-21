@@ -113,6 +113,9 @@
                         <span id="cloudDot" class="w-2.5 h-2.5 rounded-full bg-gray-400 inline-block border border-[#4E342E]"></span>
                         ☁️ 多人同步 / 備份
                     </button>
+                    <button onclick="copySyncInviteLink()" id="quickShareBtn" class="hidden kawaii-btn bg-[#FFE082] hover:bg-[#FFD54F] px-3 py-2 text-xs">
+                        📲 複製同步連結俾朋友
+                    </button>
                     <button onclick="pullFromCloud(true)" id="quickRefreshBtn" class="hidden kawaii-btn bg-[#B2DFDB] hover:bg-[#80CBC4] px-3 py-2 text-xs">
                         🔄 同步最新
                     </button>
@@ -120,20 +123,24 @@
             </div>
         </div>
 
-        <!-- 主導航分頁 Tabs -->
-        <nav class="grid grid-cols-4 gap-2 md:gap-3 mt-4">
-            <button onclick="switchTab('overview')" id="tab-overview" class="kawaii-btn bg-white py-2.5 px-2 text-xs md:text-sm flex flex-col md:flex-row items-center justify-center gap-1 tab-active">
-                <span class="text-lg">🏠</span> <span>1. 概要</span>
+        <!-- 主導航分頁 Tabs (升級為 5 個分頁) -->
+        <nav class="grid grid-cols-5 gap-1.5 md:gap-3 mt-4">
+            <button onclick="switchTab('overview')" id="tab-overview" class="kawaii-btn bg-white py-2.5 px-1 md:px-2 text-[11px] md:text-sm flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-1 tab-active">
+                <span class="text-base md:text-lg">🏠</span> <span>1. 概要</span>
             </button>
-            <button onclick="switchTab('itinerary')" id="tab-itinerary" class="kawaii-btn bg-white py-2.5 px-2 text-xs md:text-sm flex flex-col md:flex-row items-center justify-center gap-1">
-                <span class="text-lg">🗓️</span> <span>2. 行程表</span>
+            <button onclick="switchTab('itinerary')" id="tab-itinerary" class="kawaii-btn bg-white py-2.5 px-1 md:px-2 text-[11px] md:text-sm flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-1">
+                <span class="text-base md:text-lg">🗓️</span> <span>2. 行程表</span>
             </button>
-            <button onclick="switchTab('todos')" id="tab-todos" class="kawaii-btn bg-white py-2.5 px-2 text-xs md:text-sm flex flex-col md:flex-row items-center justify-center gap-1 relative">
-                <span class="text-lg">✅</span> <span>3. 待辦預約</span>
+            <button onclick="switchTab('todos')" id="tab-todos" class="kawaii-btn bg-white py-2.5 px-1 md:px-2 text-[11px] md:text-sm flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-1 relative">
+                <span class="text-base md:text-lg">✅</span> <span>3. 待辦預約</span>
                 <span id="navTodoBadge" class="bg-[#FF5252] text-white text-[10px] px-1.5 py-0.2 rounded-full border border-[#4E342E]">0</span>
             </button>
-            <button onclick="switchTab('expenses')" id="tab-expenses" class="kawaii-btn bg-white py-2.5 px-2 text-xs md:text-sm flex flex-col md:flex-row items-center justify-center gap-1">
-                <span class="text-lg">💰</span> <span>4. 支出分帳</span>
+            <button onclick="switchTab('expenses')" id="tab-expenses" class="kawaii-btn bg-white py-2.5 px-1 md:px-2 text-[11px] md:text-sm flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-1">
+                <span class="text-base md:text-lg">💰</span> <span>4. 支出分帳</span>
+            </button>
+            <button onclick="switchTab('shopping')" id="tab-shopping" class="kawaii-btn bg-white py-2.5 px-1 md:px-2 text-[11px] md:text-sm flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-1 relative">
+                <span class="text-base md:text-lg">🛍️</span> <span>5. 購物清單</span>
+                <span id="navShopBadge" class="bg-[#FF8A65] text-white text-[10px] px-1.5 py-0.2 rounded-full border border-[#4E342E]">0</span>
             </button>
         </nav>
     </header>
@@ -143,30 +150,38 @@
 
         <!-- ==================== TAB 1: 概要 (OVERVIEW) ==================== -->
         <section id="sec-overview" class="space-y-5">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div onclick="switchTab('itinerary')" class="kawaii-card-sm bg-[#FFF3E0] p-4 cursor-pointer hover:translate-y-[-2px] transition">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-[#8D6E63]">📍 已排定行程點</span>
                         <span class="text-2xl">🗺️</span>
                     </div>
-                    <div class="text-2xl font-extrabold mt-1" id="statTotalSpots">0 個地點</div>
-                    <p class="text-xs text-[#6D4C41] mt-1">全程住 The Path Siam (4晚)</p>
+                    <div class="text-xl md:text-2xl font-extrabold mt-1" id="statTotalSpots">0 個地點</div>
+                    <p class="text-[11px] text-[#6D4C41] mt-1">全程住 The Path Siam (4晚)</p>
                 </div>
                 <div onclick="switchTab('todos')" class="kawaii-card-sm bg-[#E8F5E9] p-4 cursor-pointer hover:translate-y-[-2px] transition">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-[#2E7D32]">📌 待辦 / 預約進度</span>
                         <span class="text-2xl">🎟️</span>
                     </div>
-                    <div class="text-2xl font-extrabold mt-1" id="statTodoProgress">0 / 0 已完成</div>
-                    <p class="text-xs text-[#388E3C] mt-1" id="statTodoSub">點擊前往填寫預約時間</p>
+                    <div class="text-xl md:text-2xl font-extrabold mt-1" id="statTodoProgress">0 / 0 已完成</div>
+                    <p class="text-[11px] text-[#388E3C] mt-1" id="statTodoSub">點擊前往填寫預約時間</p>
+                </div>
+                <div onclick="switchTab('shopping')" class="kawaii-card-sm bg-[#FCE4EC] p-4 cursor-pointer hover:translate-y-[-2px] transition">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-[#AD1457]">🛍️ 必買購物清單</span>
+                        <span class="text-2xl">🛒</span>
+                    </div>
+                    <div class="text-xl md:text-2xl font-extrabold mt-1" id="statShopProgress">0 / 0 已買</div>
+                    <p class="text-[11px] text-[#C2185B] mt-1" id="statShopSub">點擊查看各人必買 Item</p>
                 </div>
                 <div onclick="switchTab('expenses')" class="kawaii-card-sm bg-[#E0F7FA] p-4 cursor-pointer hover:translate-y-[-2px] transition">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-[#00695C]">💸 旅費累計總支出</span>
                         <span class="text-2xl">🐷</span>
                     </div>
-                    <div class="text-2xl font-extrabold mt-1" id="statTotalExpense">HK$ 0</div>
-                    <p class="text-xs text-[#00796B] mt-1" id="statExpenseSub">點擊查看分帳與付款建議</p>
+                    <div class="text-xl md:text-2xl font-extrabold mt-1" id="statTotalExpense">HK$ 0</div>
+                    <p class="text-[11px] text-[#00796B] mt-1" id="statExpenseSub">點擊查看分帳與付款建議</p>
                 </div>
             </div>
 
@@ -295,7 +310,7 @@
                     <span class="text-xs font-extrabold">👯 旅伴名單：</span>
                     <div id="memberTags" class="flex flex-wrap gap-1.5"></div>
                     <div class="flex items-center gap-1">
-                        <input id="newMemberInput" type="text" placeholder="加朋友名..." class="w-24 px-2.5 py-1 rounded-lg border-2 border-[#4E342E] text-xs">
+                        <input id="newMemberInput" type="text" placeholder="加朋友名..." class="w-24 px-2.5 py-1 rounded-lg border-2 border-[#4E342E] text-xs" onkeydown="if(event.key==='Enter') addMember()">
                         <button onclick="addMember()" class="kawaii-btn bg-[#FFD54F] px-2.5 py-1 text-xs">+ 新增</button>
                     </div>
                 </div>
@@ -403,6 +418,51 @@
                 </div>
             </div>
         </section>
+
+        <!-- ==================== TAB 5: 購物清單 (SHOPPING LIST - 全新功能) ==================== -->
+        <section id="sec-shopping" class="hidden space-y-5">
+            <!-- 頂部橫幅、旅伴快速管理與篩選列 -->
+            <div class="kawaii-card p-5 bg-gradient-to-r from-[#FCE4EC] via-[#FFF8E1] to-[#E0F7FA] space-y-3.5">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">🛍️ 大家嘅曼谷必買清單</h2>
+                        <p class="text-xs text-[#5D4037] mt-0.5">分人記低「地點、店舖、Item」，去到商場或老街一鍵切換「按地點集中掃貨」唔怕漏買！</p>
+                    </div>
+                    <button onclick="openShopModal()" class="kawaii-btn bg-[#FF8A65] hover:bg-[#F4511E] text-white px-5 py-2.5 text-xs md:text-sm flex items-center justify-center gap-1.5 shrink-0">
+                        🛒 ➕ 新增必買 Item
+                    </button>
+                </div>
+
+                <!-- 旅伴名單快速新增 (與支出分頁同步) -->
+                <div class="flex flex-wrap items-center gap-2 pt-2 border-t-2 border-dashed border-[#4E342E]/20 text-xs">
+                    <span class="font-extrabold">👯 按人篩選：</span>
+                    <div id="shopPersonFilterBar" class="flex flex-wrap gap-1.5"></div>
+                    <div class="flex items-center gap-1 ml-auto">
+                        <input id="shopNewMemberInput" type="text" placeholder="新增旅伴名..." class="w-24 px-2.5 py-1 rounded-lg border-2 border-[#4E342E] bg-white text-xs" onkeydown="if(event.key==='Enter') addMemberFromShop()">
+                        <button onclick="addMemberFromShop()" class="kawaii-btn bg-[#FFD54F] px-2.5 py-1 text-xs">+ 加人</button>
+                    </div>
+                </div>
+
+                <!-- 檢視切換：按旅伴 vs 按地點集中睇 -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#4E342E]/15 text-xs">
+                    <div class="flex items-center gap-2">
+                        <button id="shopViewPersonBtn" onclick="setShopViewMode('person')" class="kawaii-btn bg-[#FFD54F] px-3.5 py-1.5 text-xs">
+                            👤 按旅伴分類睇
+                        </button>
+                        <button id="shopViewLocationBtn" onclick="setShopViewMode('location')" class="kawaii-btn bg-white px-3.5 py-1.5 text-xs">
+                            📍 按地點集中掃貨
+                        </button>
+                    </div>
+                    <label class="inline-flex items-center gap-1.5 font-extrabold cursor-pointer bg-white px-3 py-1.5 rounded-full border-2 border-[#4E342E]">
+                        <input type="checkbox" id="hideBoughtCheckbox" onchange="renderShopping()" class="accent-[#FF8A65]">
+                        <span>🙈 隱藏已買項目</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 購物清單卡片容器 -->
+            <div id="shoppingGroupsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </section>
     </main>
 
     <!-- ==================== MODAL 1: 新增 / 更改行程彈窗 ==================== -->
@@ -509,81 +569,136 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL 3: 可愛內建確認彈窗 ==================== -->
+    <!-- ==================== MODAL 3: 可愛內建確認刪除彈窗 ==================== -->
     <div id="confirmModal" class="fixed inset-0 bg-black/50 z-[60] hidden items-center justify-center p-4">
         <div class="kawaii-card bg-white max-w-sm w-full p-5 text-center space-y-4">
-            <div id="confirmModalIcon" class="text-4xl">🗑️</div>
-            <h3 id="confirmModalTitle" class="text-base font-extrabold text-[#3E2723]">確定要執行嗎？</h3>
+            <div class="text-4xl">🗑️</div>
+            <h3 id="confirmModalTitle" class="text-base font-extrabold text-[#3E2723]">確定要刪除嗎？</h3>
             <p id="confirmModalDesc" class="text-xs text-[#5D4037] leading-relaxed"></p>
             <div class="flex gap-2.5 justify-center pt-1">
-                <button onclick="closeModal('confirmModal')" class="flex-1 kawaii-btn bg-gray-100 py-2 text-xs">取消</button>
-                <button id="confirmModalYesBtn" class="flex-1 kawaii-btn bg-[#FF5252] text-white py-2 text-xs">確定！</button>
+                <button onclick="closeModal('confirmModal')" class="flex-1 kawaii-btn bg-gray-100 py-2 text-xs">先唔好</button>
+                <button id="confirmModalYesBtn" class="flex-1 kawaii-btn bg-[#FF5252] text-white py-2 text-xs">確定執行！</button>
             </div>
         </div>
     </div>
 
-    <!-- ==================== MODAL 4: 多人同步與備份彈窗 (防洗機升級版) ==================== -->
+    <!-- ==================== MODAL 4: 多人同步與備份彈窗 (防洗資料保護升級版) ==================== -->
     <div id="syncModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-        <div class="kawaii-card bg-white max-w-lg w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="kawaii-card bg-white max-w-lg w-full p-5 space-y-4 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-extrabold">☁️ 多人安全同步 & 記憶備份</h3>
+                <h3 class="text-lg font-extrabold">☁️ 多人同時改動設定 & 記憶備份</h3>
                 <button onclick="closeModal('syncModal')" class="text-xl font-bold px-2">✕</button>
             </div>
 
-            <!-- 雲端同步區塊 -->
-            <div class="p-4 rounded-2xl bg-[#E0F7FA] border-2 border-[#4E342E] space-y-3 text-xs">
-                <div class="flex items-center justify-between">
-                    <div class="font-extrabold text-sm text-[#00695C]">🚀 多人雲端智能同步 (防覆蓋保護已啟用)</div>
-                    <span class="bg-emerald-100 text-emerald-900 border border-[#4E342E] px-2 py-0.5 rounded-full text-[10px] font-extrabold">🛡️ 自動合併改動</span>
+            <div class="p-3.5 rounded-2xl bg-[#E0F7FA] border-2 border-[#4E342E] space-y-2.5 text-xs">
+                <div class="font-extrabold text-sm text-[#00695C]">🚀 方式一：多人雲端即時同步（防洗資料保護版🛡️）</div>
+                <div class="bg-white/80 p-2.5 rounded-xl border border-[#4E342E]/30 text-[#004D40] space-y-1 leading-relaxed">
+                    <p>1️⃣ <b>發起人（你）：</b>貼上 <a href="https://jsonbin.io" target="_blank" class="underline font-bold">jsonbin.io</a> 的 <b>X-Master-Key</b> ➔ 撳「✨ 首次建立新房間」➔ 撳 <b>「📲 複製朋友專屬同步連結」</b> 發去 WhatsApp！</p>
+                    <p>2️⃣ <b>旅伴（朋友）：</b>直接打開 WhatsApp 條專屬連結就會自動連接並載入最新行程！如果手動貼 Key + Bin ID，請撳 <b>「🔗 連接房間並下載最新資料」</b>，絕對唔會洗走大家改過嘅嘢！</p>
                 </div>
 
-                <div class="bg-white/80 p-2.5 rounded-xl border border-[#4DB6AC] text-[#004D40] leading-relaxed space-y-1">
-                    <div>👑 <b>第 1 位房主：</b>貼上 <a href="https://jsonbin.io" target="_blank" class="underline font-bold">jsonbin.io</a> 嘅 <b>X-Master-Key</b> ➔ 撳「🆕 建立全新房間」➔ 再撳「📲 複製邀請連結」發俾朋友！</div>
-                    <div>👯 <b>朋友加入：</b>直接打開房主發嘅邀請連結，或者貼上 Key 同 Bin ID 後撳 <b>「🔗 加入房間並下載最新資料」</b>（唔會洗走房主啲嘢！）。</div>
+                <input id="cloudApiKey" type="password" placeholder="貼上 JSONBin X-Master-Key ($2a$10$...)" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E] bg-white">
+                <div class="flex gap-2">
+                    <input id="cloudBinId" type="text" placeholder="共用房間 Bin ID" class="flex-1 px-3 py-2 rounded-xl border-2 border-[#4E342E] bg-white">
+                    <button onclick="createCloudRoom()" class="kawaii-btn bg-[#FFD54F] px-3 py-2 whitespace-nowrap" title="只限第一次開新房用">✨ 首次建立新房間</button>
                 </div>
 
-                <div class="space-y-2">
-                    <input id="cloudApiKey" type="password" placeholder="貼上 JSONBin X-Master-Key ($2a$10$...)" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E] bg-white">
-                    <input id="cloudBinId" type="text" placeholder="共用房間 Bin ID (旅伴請貼上房號；房主首次建立可留空)" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E] bg-white">
-                </div>
-
-                <!-- 朋友加入主按鈕 (只下載不覆蓋！) -->
-                <button onclick="connectAndPullCloud()" class="w-full kawaii-btn bg-[#4DB6AC] hover:bg-[#26A69A] text-white py-2.5 text-sm">
-                    🔗 加入房間並下載最新資料 (朋友加入撳呢個！)
-                </button>
-
-                <!-- 分享與日常同步按鈕列 -->
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="copyShareInvite()" class="kawaii-btn bg-[#FFD54F] hover:bg-[#FFCA28] py-2 px-3">
-                        📲 複製邀請連結 / 房號
+                <!-- 安全連接按鈕：只下載合併，絕不盲目覆蓋雲端 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    <button onclick="connectAndPullCloud()" class="kawaii-btn bg-[#4DB6AC] hover:bg-[#26A69A] text-white py-2.5 px-3 text-xs">
+                        🔗 連接房間並下載最新資料
                     </button>
-                    <button onclick="createCloudRoom()" class="kawaii-btn bg-white hover:bg-amber-50 py-2 px-3">
-                        🆕 建立全新房間 (房主首次用)
-                    </button>
-                </div>
-
-                <!-- 進階管理 (強制上傳設保護確認) -->
-                <div class="pt-2 border-t border-dashed border-[#4DB6AC] flex flex-wrap items-center justify-between gap-2">
-                    <span class="text-[11px] text-[#00695C] font-bold">進階修復：如想用你目前畫面蓋過雲端</span>
-                    <button onclick="forceOverwriteCloud()" class="kawaii-btn bg-rose-50 hover:bg-rose-100 text-rose-800 px-3 py-1 text-[11px]">
-                        ⬆️ 強制以我畫面覆蓋雲端
+                    <button onclick="copySyncInviteLink()" class="kawaii-btn bg-[#FFE082] hover:bg-[#FFD54F] py-2.5 px-3 text-xs">
+                        📲 複製朋友專屬同步連結
                     </button>
                 </div>
 
                 <p id="cloudStatusMsg" class="text-[11px] font-bold text-[#00695C]"></p>
+
+                <!-- 進階救援選項 (收起避免誤觸) -->
+                <details class="pt-1 border-t border-[#4E342E]/20">
+                    <summary class="cursor-pointer font-bold text-[11px] text-gray-600">⚙️ 進階選項：強制用我部機嘅資料覆蓋雲端</summary>
+                    <div class="mt-2 flex items-center justify-between gap-2 bg-rose-50 p-2 rounded-xl border border-rose-300">
+                        <span class="text-[11px] text-rose-800">⚠️ 只限雲端資料出錯、想用你目前畫面完全取代雲端時使用：</span>
+                        <button onclick="confirmForceOverwriteCloud()" class="kawaii-btn bg-rose-500 text-white px-2.5 py-1 text-[11px] shrink-0">強制上傳覆蓋</button>
+                    </div>
+                </details>
             </div>
 
-            <!-- 檔案備份區塊 -->
             <div class="p-3.5 rounded-2xl bg-[#FFF8E1] border-2 border-[#4E342E] space-y-2.5 text-xs">
-                <div class="font-extrabold text-sm text-[#E65100]">📦 免註冊備份檔匯出 / 匯入</div>
-                <p class="text-[#5D4037]">隨時下載 `.json` 備份留底，或者匯入旅伴發過嚟嘅備份檔：</p>
+                <div class="font-extrabold text-sm text-[#E65100]">📦 方式二：免註冊備份檔匯出 / 匯入</div>
+                <p class="text-[#5D4037]">本網頁已自動儲存在你的瀏覽器。你亦可以隨時下載備份檔留底：</p>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="exportJsonFile()" class="kawaii-btn bg-white px-3.5 py-2">⬇️ 下載備份檔 (.json)</button>
                     <label class="kawaii-btn bg-[#FF8A65] text-white px-3.5 py-2 cursor-pointer">
-                        ⬆️ 讀取備份檔
+                        ⬆️ 讀取朋友的備份檔
                         <input type="file" accept=".json" onchange="importJsonFile(event)" class="hidden">
                     </label>
                     <button onclick="confirmResetDefault()" class="kawaii-btn bg-rose-100 text-rose-800 px-3 py-2 ml-auto">🔄 重設回初始行程</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 5: 新增 / 更改購物清單彈窗 (全新) ==================== -->
+    <div id="shopModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="kawaii-card bg-white max-w-md w-full p-5 space-y-3 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h3 id="shopModalTitle" class="text-lg font-extrabold">🛍️ 新增購物清單 Item</h3>
+                <button onclick="closeModal('shopModal')" class="text-xl font-bold px-2">✕</button>
+            </div>
+            <input type="hidden" id="editingShopId" value="">
+
+            <div class="space-y-3 text-xs">
+                <!-- 分人 -->
+                <div>
+                    <label class="font-bold block mb-1">👤 邊個要買？（點擊快選或直接打新名）</label>
+                    <div id="shopModalPersonChips" class="flex flex-wrap gap-1.5 mb-1.5"></div>
+                    <input id="shopPersonInput" type="text" placeholder="例：我 / 旅伴 A / 大家共用" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E] font-extrabold bg-amber-50">
+                </div>
+
+                <!-- 地點 -->
+                <div>
+                    <label class="font-bold block mb-1">📍 地點 / 商圈（快選今次行程地點或自填）</label>
+                    <div class="flex flex-wrap gap-1 mb-1.5">
+                        <button type="button" onclick="setShopField('shopLocationInput','CentralWorld')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">CentralWorld</button>
+                        <button type="button" onclick="setShopField('shopLocationInput','Siam Paragon')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">Siam Paragon</button>
+                        <button type="button" onclick="setShopField('shopLocationInput','Song Wat Road')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">Song Wat</button>
+                        <button type="button" onclick="setShopField('shopLocationInput','Big C Ratchadamri')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">Big C</button>
+                        <button type="button" onclick="setShopField('shopLocationInput','ICONSIAM')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">ICONSIAM</button>
+                        <button type="button" onclick="setShopField('shopLocationInput','隨街見到就買')" class="px-2 py-0.5 rounded-lg bg-[#FFF3E0] border border-[#4E342E] font-bold text-[11px]">隨街見到</button>
+                    </div>
+                    <input id="shopLocationInput" type="text" placeholder="例：CentralWorld / Song Wat Road / 機場" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E]">
+                </div>
+
+                <!-- 店舖 -->
+                <div>
+                    <label class="font-bold block mb-1">🏪 店舖名稱</label>
+                    <div class="flex flex-wrap gap-1 mb-1.5">
+                        <button type="button" onclick="setShopField('shopStoreInput','Pokémon Center 6F')" class="px-2 py-0.5 rounded-lg bg-[#E0F7FA] border border-[#4E342E] font-bold text-[11px]">⚡ Pokémon Center</button>
+                        <button type="button" onclick="setShopField('shopStoreInput','Kitcharoen 鈎針老店')" class="px-2 py-0.5 rounded-lg bg-[#E0F7FA] border border-[#4E342E] font-bold text-[11px]">🧶 Kitcharoen</button>
+                        <button type="button" onclick="setShopField('shopStoreInput','Copenn 香水')" class="px-2 py-0.5 rounded-lg bg-[#E0F7FA] border border-[#4E342E] font-bold text-[11px]">🧴 Copenn</button>
+                        <button type="button" onclick="setShopField('shopStoreInput','7-Eleven')" class="px-2 py-0.5 rounded-lg bg-[#E0F7FA] border border-[#4E342E] font-bold text-[11px]">🏪 7-Eleven</button>
+                        <button type="button" onclick="setShopField('shopStoreInput','Boots / 藥妝店')" class="px-2 py-0.5 rounded-lg bg-[#E0F7FA] border border-[#4E342E] font-bold text-[11px]">💄 Boots</button>
+                    </div>
+                    <input id="shopStoreInput" type="text" placeholder="例：Pokémon Center / Big C 超市 / Gentlewoman" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E]">
+                </div>
+
+                <!-- Item -->
+                <div>
+                    <label class="font-bold block mb-1">🛒 要買咩 Item？（必填）</label>
+                    <input id="shopItemInput" type="text" placeholder="例：泰服比卡超公仔 / 鈎針冷線 / 紫菜手信" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E] font-extrabold">
+                </div>
+
+                <!-- 備註 / 數量 / 預算 -->
+                <div>
+                    <label class="font-bold block mb-1">📝 數量 / 款式 / 價錢備註（選填）</label>
+                    <input id="shopNotesInput" type="text" placeholder="例：THB 680 x 2隻、幫屋企人買" class="w-full px-3 py-2 rounded-xl border-2 border-[#4E342E]">
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="closeModal('shopModal')" class="kawaii-btn bg-gray-100 px-4 py-2.5 text-xs">取消</button>
+                    <button id="shopModalSaveBtn" onclick="saveShopModal()" class="flex-1 kawaii-btn bg-[#FF8A65] text-white py-2.5 text-sm">💾 儲存至購物清單</button>
                 </div>
             </div>
         </div>
@@ -596,10 +711,10 @@
         // ==================== 1. 根據 Bangkok.xlsx 預載的完整初始資料 ====================
         const STORAGE_KEY = 'bkk_citybreak_2026_v1';
         const CLOUD_CFG_KEY = 'bkk_cloud_cfg_2026';
-        const CLOUD_BASE_KEY = 'bkk_cloud_base_snapshot_2026'; // 記錄上次雲端同步基準，用於3向智能合併
 
         const DEFAULT_DATA = {
-            updatedAt: 0, // 0 代表未曾手動修改過的初始預設範本（防洗機鎖）
+            updatedAt: 0, // 0 代表初始未改動狀態，防止新開網頁覆蓋雲端！
+            deletedIds: [],
             thbRate: 4.4,
             members: ['我', '旅伴 A', '旅伴 B', '旅伴 C'],
             flights: [
@@ -629,7 +744,7 @@
                 day0: [
                     { id: 'd0-1', time: '20:00–22:00', title: '🛂 香港機場 T1 Check-in', transport: '機場快綫 / 巴士往香港國際機場 T1', address: 'Hong Kong International Airport Terminal 1', notes: '起飛前約 2 小時到達辦理登機手續。', emoji: '✈️' },
                     { id: 'd0-2', time: '22:10–00:15', title: '✈️ 乘搭 CX617 飛往曼谷', transport: '國泰航空 CX617 (航程約3小時)', address: 'Suvarnabhumi Airport Bangkok', notes: '泰國時間比香港慢 1 小時。00:15–01:15 落機入境、取行李。', emoji: '✈️' },
-                    { id: 'd0-3', time: '01:30 (+1)', title: '🏪 7-Eleven 買防曬 ➔ The Path Siam Check-in', transport: '機場搭 Taxi / Grab 直達酒店 (深夜約30–45分鐘)', address: 'The Path Siam, 22 Soi Kasemsan 1, Rama 1 Rd, Pathum Wan, Bangkok', notes: '2025翻新精品酒店，房間有投影機，24小時前台。訂房唔包早餐。電話：+66 2 612 3590', emoji: '🏨' }
+                    { id: 'd0-3', time: '01:30', title: '🏪 7-Eleven 買防曬 ➔ The Path Siam Check-in', transport: '機場搭 Taxi / Grab 直達酒店 (深夜約30–45分鐘)', address: 'The Path Siam, 22 Soi Kasemsan 1, Rama 1 Rd, Pathum Wan, Bangkok', notes: '2025翻新精品酒店，房間有投影機，24小時前台。訂房唔包早餐。電話：+66 2 612 3590', emoji: '🏨' }
                 ],
                 day1: [
                     { id: 'd1-1', time: '08:00–09:30', title: '🍳 早餐：Jok Sam Yan 豬肉粥 (Stadium One)', transport: '由酒店步行前往', address: 'Jok Sam Yan, Stadium One, 689-693 Banthat Thong Rd, Bangkok', notes: '65年老字號茉莉香米粥，豬肉粥加蛋最經典 (約 THB 70)。營業：05:00–10:00。', emoji: '🥣' },
@@ -674,69 +789,76 @@
             expenses: [
                 { id: 'ex-demo1', payer: '我', datetime: '2026-12-03T23:55', category: '🏨 住宿', desc: 'The Path Siam 4晚房費 (示範紀錄可刪除)', amount: 3200, currency: 'HKD', splitWith: ['我', '旅伴 A', '旅伴 B', '旅伴 C'] },
                 { id: 'ex-demo2', payer: '旅伴 A', datetime: '2026-12-04T01:15', category: '🚕 交通', desc: 'Suvarnabhumi 機場深夜 Grab 去酒店 (示範)', amount: 480, currency: 'THB', splitWith: ['我', '旅伴 A', '旅伴 B', '旅伴 C'] }
+            ],
+            shoppingList: [
+                { id: 'sh-demo1', person: '我', location: 'CentralWorld', store: 'Pokémon Center 6F', item: '開幕限定「泰服比卡超公仔」', notes: 'THB 680（留意限購）', bought: false },
+                { id: 'sh-demo2', person: '旅伴 A', location: 'Song Wat Road', store: 'Kitcharoen 鈎針老店', item: '鈎針冷線 & 手作材料', notes: 'Day 1 16:30前要去到！', bought: false },
+                { id: 'sh-demo3', person: '旅伴 B', location: 'Song Wat Road', store: 'Copenn 香水', item: 'Last Volcano 木質煙燻調香水', notes: '試埋護手霜', bought: false },
+                { id: 'sh-demo4', person: '大家共用', location: 'Big C Ratchadamri', store: 'Big C 超市', item: '紫菜、芒果乾、手標泰奶、鼻通', notes: '夾埋買滿 THB 2,000 上 2/F 退稅', bought: false }
             ]
         };
 
         let appData = loadLocalData();
         let currentTab = 'overview';
         let currentDay = 'day1';
+        let currentShopPersonFilter = 'ALL';
+        let currentShopViewMode = 'person'; // 'person' | 'location'
         let pendingConfirmAction = null;
+        let lastCloudSyncedAt = 0;
         let isCloudBusy = false;
-        let pushTimer = null;
 
         // 安全防呆轉義文字
         function escHtml(str) {
             if (!str) return '';
             return String(str)
-                .replace(/&/g, '&')
-                .replace(/</g, '<')
-                .replace(/>/g, '>')
-                .replace(/"/g, '"')
-                .replace(/'/g, ''');
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
-        // 時間排序輔助 (支援跨日凌晨如 01:30 (+1) 排喺 22:10 後面)
-        function timeSortKey(timeStr) {
-            if (!timeStr) return '99:99';
-            const s = String(timeStr).trim();
-            if (s.includes('+1')) return '3' + s;
-            const m = s.match(/^(\d{1,2}):(\d{2})/);
-            if (m) {
-                const hh = m[1].padStart(2, '0');
-                // Day 0 深夜 00:xx - 04:xx 排喺 23:59 之後
-                if (currentDay === 'day0' && Number(hh) < 5) return `2${hh}:${m[2]}`;
-                return `1${hh}:${m[2]}`;
-            }
-            return '1' + s;
+        function ensureDataShape(data) {
+            if (!data || typeof data !== 'object') return JSON.parse(JSON.stringify(DEFAULT_DATA));
+            if (!Array.isArray(data.members) || data.members.length === 0) data.members = ['我', '旅伴 A'];
+            if (!Array.isArray(data.flights)) data.flights = JSON.parse(JSON.stringify(DEFAULT_DATA.flights));
+            if (!data.daysMeta) data.daysMeta = JSON.parse(JSON.stringify(DEFAULT_DATA.daysMeta));
+            if (!data.itinerary) data.itinerary = JSON.parse(JSON.stringify(DEFAULT_DATA.itinerary));
+            if (!Array.isArray(data.todos)) data.todos = [];
+            if (!Array.isArray(data.expenses)) data.expenses = [];
+            if (!Array.isArray(data.shoppingList)) data.shoppingList = JSON.parse(JSON.stringify(DEFAULT_DATA.shoppingList));
+            if (!Array.isArray(data.deletedIds)) data.deletedIds = [];
+            if (typeof data.updatedAt !== 'number') data.updatedAt = 0;
+            if (!data.thbRate) data.thbRate = 4.4;
+            return data;
         }
 
         function loadLocalData() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (typeof parsed.updatedAt === 'undefined') {
-                        // 兼容舊版已修改過的 localStorage 資料：若與預設不同則標記時間戳
-                        const defCopy = JSON.stringify({ ...DEFAULT_DATA, updatedAt: undefined });
-                        const curCopy = JSON.stringify({ ...parsed, updatedAt: undefined });
-                        parsed.updatedAt = (defCopy === curCopy) ? 0 : Date.now();
-                    }
-                    return parsed;
-                }
+                if (raw) return ensureDataShape(JSON.parse(raw));
             } catch (e) { console.error(e); }
             return JSON.parse(JSON.stringify(DEFAULT_DATA));
         }
 
-        // 當使用者真正作出修改時呼叫 saveData()
+        function markDeletedId(id) {
+            if (!id) return;
+            if (!Array.isArray(appData.deletedIds)) appData.deletedIds = [];
+            if (!appData.deletedIds.includes(id)) {
+                appData.deletedIds.push(id);
+                if (appData.deletedIds.length > 300) appData.deletedIds = appData.deletedIds.slice(-300);
+            }
+        }
+
         function saveData(skipCloud = false) {
             if (!skipCloud) {
                 appData.updatedAt = Date.now();
             }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             const statusEl = document.getElementById('saveStatus');
-            statusEl.textContent = skipCloud ? '☁️ 已同步最新' : '💾 已自動記憶';
+            statusEl.textContent = '💾 剛剛已自動記憶';
             renderAll();
-            if (!skipCloud) schedulePushToCloud();
+            if (!skipCloud) pushToCloud();
         }
 
         function showToast(msg) {
@@ -748,11 +870,9 @@
         }
 
         // 自訂可愛確認彈窗
-        function askConfirm(title, desc, onYes, icon = '🗑️', btnText = '確定！') {
-            document.getElementById('confirmModalIcon').textContent = icon;
+        function askConfirm(title, desc, onYes) {
             document.getElementById('confirmModalTitle').textContent = title;
             document.getElementById('confirmModalDesc').textContent = desc;
-            document.getElementById('confirmModalYesBtn').textContent = btnText;
             pendingConfirmAction = onYes;
             document.getElementById('confirmModalYesBtn').onclick = () => {
                 closeModal('confirmModal');
@@ -765,7 +885,7 @@
         // ==================== 2. 分頁與渲染控制 ====================
         function switchTab(tab) {
             currentTab = tab;
-            ['overview', 'itinerary', 'todos', 'expenses'].forEach(t => {
+            ['overview', 'itinerary', 'todos', 'expenses', 'shopping'].forEach(t => {
                 document.getElementById(`sec-${t}`).classList.toggle('hidden', t !== tab);
                 document.getElementById(`tab-${t}`).classList.toggle('tab-active', t === tab);
             });
@@ -782,6 +902,7 @@
             renderItinerary();
             renderTodos();
             renderExpenses();
+            renderShopping();
         }
 
         // ==================== 3. 渲染 TAB 1: 概要 ====================
@@ -797,11 +918,19 @@
             document.getElementById('navTodoBadge').textContent = pendingCount;
             document.getElementById('navTodoBadge').classList.toggle('hidden', pendingCount === 0);
 
+            const shopAll = appData.shoppingList || [];
+            const shopBought = shopAll.filter(s => s.bought).length;
+            const shopPending = shopAll.length - shopBought;
+            document.getElementById('statShopProgress').textContent = `${shopBought} / ${shopAll.length} 已買`;
+            document.getElementById('statShopSub').textContent = shopPending > 0 ? `仲有 ${shopPending} 樣必買戰利品！` : '🛍️ 購物清單已買齊晒！';
+            document.getElementById('navShopBadge').textContent = shopPending;
+            document.getElementById('navShopBadge').classList.toggle('hidden', shopPending === 0);
+
             const totalHkd = appData.expenses.reduce((sum, ex) => {
                 return sum + (ex.currency === 'HKD' ? Number(ex.amount) : Number(ex.amount) / appData.thbRate);
             }, 0);
             document.getElementById('statTotalExpense').textContent = `HK$ ${totalHkd.toFixed(0)}`;
-            document.getElementById('statExpenseSub').textContent = `共 ${appData.expenses.length} 筆紀錄｜人均約 HK$ ${(totalHkd / Math.max(1, appData.members.length)).toFixed(0)}`;
+            document.getElementById('statExpenseSub').textContent = `共 ${appData.expenses.length} 筆｜人均約 $${(totalHkd / Math.max(1, appData.members.length)).toFixed(0)}`;
 
             document.getElementById('overviewFlights').innerHTML = appData.flights.map(f => `
                 <div class="p-3.5 rounded-2xl bg-[#FFFDF7] border-2 border-[#4E342E]">
@@ -817,10 +946,7 @@
 
             document.getElementById('overviewDaysGrid').innerHTML = Object.keys(appData.daysMeta).map(dKey => {
                 const meta = appData.daysMeta[dKey];
-                const prevDay = currentDay;
-                currentDay = dKey;
-                const spots = [...(appData.itinerary[dKey] || [])].sort((a, b) => timeSortKey(a.time).localeCompare(timeSortKey(b.time)));
-                currentDay = prevDay;
+                const spots = [...(appData.itinerary[dKey] || [])].sort((a, b) => a.time.localeCompare(b.time));
                 const previewList = spots.slice(0, 4).map(s => `<li class="truncate">• ${escHtml(s.title.replace(/^[^\w\u4e00-\u9fa5【]+/, ''))}</li>`).join('');
                 const moreText = spots.length > 4 ? `<li class="text-[#D84315] font-bold">+ 仲有 ${spots.length - 4} 個行程...</li>` : '';
                 return `
@@ -883,7 +1009,7 @@
                 </div>
             `;
 
-            const list = [...(appData.itinerary[currentDay] || [])].sort((a, b) => timeSortKey(a.time).localeCompare(timeSortKey(b.time)));
+            const list = [...(appData.itinerary[currentDay] || [])].sort((a, b) => a.time.localeCompare(b.time));
             const container = document.getElementById('timelineContainer');
 
             if (list.length === 0) {
@@ -910,7 +1036,6 @@
                                     <h3 class="text-base font-extrabold mt-1.5">${escHtml(item.title)}</h3>
                                 </div>
 
-                                <!-- 操作按鈕組 -->
                                 <div class="flex flex-wrap items-center gap-1.5">
                                     <a href="${mapUrl}" target="_blank" class="kawaii-btn bg-[#E0F7FA] hover:bg-[#B2EBF2] px-2.5 py-1 text-xs flex items-center gap-1">
                                         🗺️ 地圖
@@ -1003,11 +1128,12 @@
                     const idx = appData.itinerary[origDay].findIndex(s => s.id === editId);
                     if (idx !== -1) {
                         const existingObj = appData.itinerary[origDay][idx];
+                        const updatedObj = { ...existingObj, time, title, transport, address, notes, emoji, itemUpdatedAt: Date.now() };
                         if (origDay === targetDay) {
-                            appData.itinerary[origDay][idx] = { ...existingObj, time, title, transport, address, notes, emoji };
+                            appData.itinerary[origDay][idx] = updatedObj;
                         } else {
                             appData.itinerary[origDay].splice(idx, 1);
-                            appData.itinerary[targetDay].push({ ...existingObj, time, title, transport, address, notes, emoji });
+                            appData.itinerary[targetDay].push(updatedObj);
                         }
                     }
                 }
@@ -1017,8 +1143,9 @@
                 showToast('✅ 行程更改已儲存！');
             } else {
                 appData.itinerary[targetDay].push({
-                    id: 'sp-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
-                    time, title, transport, address, notes, emoji
+                    id: 'sp-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+                    time, title, transport, address, notes, emoji,
+                    itemUpdatedAt: Date.now()
                 });
                 currentDay = targetDay;
                 closeModal('spotModal');
@@ -1036,10 +1163,12 @@
                 '確定刪除呢個行程？',
                 `「${item.time} ${item.title}」將會從 ${appData.daysMeta[day]?.label} 時間表中移除。`,
                 () => {
+                    markDeletedId(spotId);
                     appData.itinerary[day] = (appData.itinerary[day] || []).filter(s => s.id !== spotId);
                     const linkedTodo = appData.todos.find(t => t.linkedSpotId === spotId);
                     if (linkedTodo) {
                         linkedTodo.done = false;
+                        linkedTodo.itemUpdatedAt = Date.now();
                         delete linkedTodo.linkedSpotId;
                     }
                     saveData();
@@ -1136,6 +1265,7 @@
             const t = appData.todos.find(x => x.id === id);
             if (t) {
                 t[field] = val;
+                t.itemUpdatedAt = Date.now();
                 saveData();
             }
         }
@@ -1151,8 +1281,9 @@
             }
 
             appData.todos.unshift({
-                id: 'td-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
-                title, day, time, location, notes: '', done: false
+                id: 'td-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+                title, day, time, location, notes: '', done: false,
+                itemUpdatedAt: Date.now()
             });
             document.getElementById('newTodoTitle').value = '';
             document.getElementById('newTodoLoc').value = '';
@@ -1164,6 +1295,7 @@
             const td = appData.todos.find(x => x.id === id);
             if (!td) return;
             td.done = true;
+            td.itemUpdatedAt = Date.now();
 
             const linkedSpotId = 'todo-spot-' + td.id;
             td.linkedSpotId = linkedSpotId;
@@ -1178,7 +1310,8 @@
                 address: td.location || td.title + ' Bangkok',
                 notes: td.notes ? `預約備註：${td.notes}` : '已完成預約確認！',
                 emoji: '🎟️',
-                fromTodo: true
+                fromTodo: true,
+                itemUpdatedAt: Date.now()
             });
 
             saveData();
@@ -1189,7 +1322,9 @@
             const td = appData.todos.find(x => x.id === id);
             if (!td) return;
             td.done = false;
+            td.itemUpdatedAt = Date.now();
             if (td.linkedSpotId) {
+                markDeletedId(td.linkedSpotId);
                 Object.keys(appData.itinerary).forEach(d => {
                     appData.itinerary[d] = appData.itinerary[d].filter(s => s.id !== td.linkedSpotId);
                 });
@@ -1202,7 +1337,9 @@
             const td = appData.todos.find(x => x.id === id);
             if (!td) return;
             askConfirm('確定刪除待辦事項？', `「${td.title}」將會被永久刪除。`, () => {
+                markDeletedId(id);
                 if (td.linkedSpotId) {
+                    markDeletedId(td.linkedSpotId);
                     Object.keys(appData.itinerary).forEach(d => {
                         appData.itinerary[d] = appData.itinerary[d].filter(s => s.id !== td.linkedSpotId);
                     });
@@ -1374,18 +1511,27 @@
             return results;
         }
 
-        function addMember() {
-            const input = document.getElementById('newMemberInput');
-            const name = input.value.trim();
-            if (!name) return;
+        function addMemberByName(rawName) {
+            const name = (rawName || '').trim();
+            if (!name) return false;
             if (appData.members.includes(name)) {
                 showToast('⚠️ 呢個名已經喺名單入面啦！');
-                return;
+                return false;
             }
             appData.members.push(name);
-            input.value = '';
             saveData();
             showToast(`👯 已加入旅伴：${name}`);
+            return true;
+        }
+
+        function addMember() {
+            const input = document.getElementById('newMemberInput');
+            if (addMemberByName(input.value)) input.value = '';
+        }
+
+        function addMemberFromShop() {
+            const input = document.getElementById('shopNewMemberInput');
+            if (addMemberByName(input.value)) input.value = '';
         }
 
         function requestRemoveMember(name) {
@@ -1471,15 +1617,16 @@
             if (editId) {
                 const idx = appData.expenses.findIndex(e => e.id === editId);
                 if (idx !== -1) {
-                    appData.expenses[idx] = { id: editId, payer, datetime, category, amount, currency, desc, splitWith };
+                    appData.expenses[idx] = { id: editId, payer, datetime, category, amount, currency, desc, splitWith, itemUpdatedAt: Date.now() };
                 }
                 resetExpenseForm();
                 saveData();
                 showToast('✅ 已更新支出紀錄！');
             } else {
                 appData.expenses.push({
-                    id: 'ex-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
-                    payer, datetime, category, amount, currency, desc, splitWith
+                    id: 'ex-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+                    payer, datetime, category, amount, currency, desc, splitWith,
+                    itemUpdatedAt: Date.now()
                 });
                 document.getElementById('expAmount').value = '';
                 document.getElementById('expDesc').value = '';
@@ -1492,6 +1639,7 @@
             const ex = appData.expenses.find(e => e.id === id);
             if (!ex) return;
             askConfirm('確定刪除呢筆支出？', `「${ex.desc} (${ex.currency} ${ex.amount})」刪除後會即時重新計算分帳。`, () => {
+                markDeletedId(id);
                 appData.expenses = appData.expenses.filter(e => e.id !== id);
                 if (document.getElementById('editingExpId').value === id) resetExpenseForm();
                 saveData();
@@ -1524,131 +1672,289 @@
             });
         }
 
-        // ==================== 7. 多人安全雲端同步 (3向智能合併 + 防初始覆蓋鎖) ====================
+        // ==================== 7. 渲染 TAB 5: 購物清單 (分人 / 地點 / 店舖 / Item) ====================
+        function getAllShopPeople() {
+            const set = new Set([...appData.members, '大家共用']);
+            (appData.shoppingList || []).forEach(s => {
+                if (s.person) set.add(s.person);
+            });
+            return Array.from(set);
+        }
+
+        function setShopViewMode(mode) {
+            currentShopViewMode = mode;
+            document.getElementById('shopViewPersonBtn').className = mode === 'person'
+                ? 'kawaii-btn bg-[#FFD54F] px-3.5 py-1.5 text-xs'
+                : 'kawaii-btn bg-white px-3.5 py-1.5 text-xs';
+            document.getElementById('shopViewLocationBtn').className = mode === 'location'
+                ? 'kawaii-btn bg-[#FFD54F] px-3.5 py-1.5 text-xs'
+                : 'kawaii-btn bg-white px-3.5 py-1.5 text-xs';
+            renderShopping();
+        }
+
+        function setShopPersonFilter(person) {
+            currentShopPersonFilter = person;
+            renderShopping();
+        }
+
+        function renderShopping() {
+            const list = appData.shoppingList || [];
+            const people = getAllShopPeople();
+            if (currentShopPersonFilter !== 'ALL' && !people.includes(currentShopPersonFilter)) {
+                currentShopPersonFilter = 'ALL';
+            }
+
+            // 分人篩選列
+            const filterBar = document.getElementById('shopPersonFilterBar');
+            const allUnbought = list.filter(i => !i.bought).length;
+            filterBar.innerHTML = [
+                `<button type="button" onclick="setShopPersonFilter('ALL')" class="kawaii-btn px-3 py-1 text-xs ${currentShopPersonFilter === 'ALL' ? 'bg-[#FF8A65] text-white' : 'bg-white'}">
+                    🌟 全部 (${allUnbought}/${list.length})
+                </button>`,
+                ...people.map(p => {
+                    const pItems = list.filter(i => i.person === p);
+                    const pLeft = pItems.filter(i => !i.bought).length;
+                    const isAct = currentShopPersonFilter === p;
+                    const icon = p === '大家共用' ? '🤝' : '🧑';
+                    return `
+                        <button type="button" data-person="${escHtml(p)}" onclick="setShopPersonFilter(this.dataset.person)" class="kawaii-btn px-3 py-1 text-xs ${isAct ? 'bg-[#FF8A65] text-white' : 'bg-white'}">
+                            ${icon} ${escHtml(p)} ${pItems.length ? `(${pLeft}/${pItems.length})` : ''}
+                        </button>
+                    `;
+                })
+            ].join('');
+
+            const hideBought = document.getElementById('hideBoughtCheckbox')?.checked;
+            const filtered = list.filter(item => {
+                if (currentShopPersonFilter !== 'ALL' && item.person !== currentShopPersonFilter) return false;
+                if (hideBought && item.bought) return false;
+                return true;
+            });
+
+            const container = document.getElementById('shoppingGroupsContainer');
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-2 kawaii-card p-8 bg-white text-center space-y-2">
+                        <div class="text-4xl">🛍️</div>
+                        <div class="text-sm font-extrabold">呢度暫時未有待買項目！</div>
+                        <p class="text-xs text-gray-500">撳右上角「🛒 ➕ 新增必買 Item」記低想買嘅手信、冷線、香水或公仔啦！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 按「旅伴」或「地點」分組
+            const groups = {};
+            filtered.forEach(item => {
+                const key = currentShopViewMode === 'person'
+                    ? (item.person || '未指定旅伴')
+                    : (item.location?.trim() || '📍 未指定地點（隨街見到就買）');
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(item);
+            });
+
+            container.innerHTML = Object.entries(groups).map(([groupName, items]) => {
+                const sorted = [...items].sort((a, b) => Number(a.bought) - Number(b.bought));
+                const boughtCount = sorted.filter(i => i.bought).length;
+                const cleanLocPreset = groupName.startsWith('📍 未指定') ? '' : groupName;
+
+                return `
+                    <div class="kawaii-card p-4 bg-white flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 pb-2.5 border-b-2 border-dashed border-[#4E342E]/20">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="text-base font-extrabold truncate">
+                                        ${currentShopViewMode === 'person' ? (groupName === '大家共用' ? '🤝 ' : '🧑 ') : '📍 '}${escHtml(groupName)}
+                                    </span>
+                                    <span class="bg-[#FFF9C4] px-2 py-0.5 rounded-full border border-[#4E342E] text-[11px] font-extrabold shrink-0">
+                                        已買 ${boughtCount}/${sorted.length}
+                                    </span>
+                                </div>
+                                ${currentShopViewMode === 'person'
+                                    ? `<button type="button" data-p="${escHtml(groupName)}" onclick="openShopModal('', this.dataset.p, '')" class="kawaii-btn bg-[#FCE4EC] hover:bg-[#F8BBD0] px-2.5 py-1 text-[11px] shrink-0">+ 幫佢加</button>`
+                                    : `<button type="button" data-loc="${escHtml(cleanLocPreset)}" onclick="openShopModal('', '', this.dataset.loc)" class="kawaii-btn bg-[#E0F7FA] hover:bg-[#B2EBF2] px-2.5 py-1 text-[11px] shrink-0">+ 呢度加</button>`
+                                }
+                            </div>
+
+                            <div class="space-y-2.5 mt-3">
+                                ${sorted.map(it => {
+                                    const mapQuery = encodeURIComponent(`${it.store || ''} ${it.location || ''} Bangkok`.trim());
+                                    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+                                    return `
+                                        <div class="p-3 rounded-xl border-2 border-[#4E342E] transition ${it.bought ? 'bg-[#F1F8E9] opacity-75' : 'bg-[#FFFDF7]'}">
+                                            <div class="flex items-start gap-2.5">
+                                                <input type="checkbox" ${it.bought ? 'checked' : ''} data-id="${escHtml(it.id)}" onchange="toggleShopBought(this.dataset.id)" class="w-4 h-4 mt-1 accent-[#4CAF50] cursor-pointer shrink-0">
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-start justify-between gap-1.5">
+                                                        <span class="font-extrabold text-sm ${it.bought ? 'line-through text-emerald-900' : 'text-[#3E2723]'}">
+                                                            ${escHtml(it.item)}
+                                                        </span>
+                                                        <div class="flex items-center gap-1 shrink-0">
+                                                            <button type="button" title="買完順便記帳" data-id="${escHtml(it.id)}" onclick="sendShopToExpense(this.dataset.id)" class="kawaii-btn bg-[#E0F2F1] px-2 py-0.5 text-[10px]">💸 記帳</button>
+                                                            <button type="button" data-id="${escHtml(it.id)}" onclick="openShopModal(this.dataset.id)" class="kawaii-btn bg-[#FFF9C4] px-2 py-0.5 text-[10px]">✏️</button>
+                                                            <button type="button" data-id="${escHtml(it.id)}" onclick="requestDeleteShopItem(this.dataset.id)" class="kawaii-btn bg-[#FFEBEE] text-rose-700 px-2 py-0.5 text-[10px]">🗑️</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="flex flex-wrap items-center gap-1.5 mt-1.5 text-[11px]">
+                                                        ${currentShopViewMode === 'location' ? `
+                                                            <span class="bg-[#FFCCBC] px-2 py-0.5 rounded-full border border-[#4E342E] font-extrabold">
+                                                                👤 ${escHtml(it.person)}
+                                                            </span>
+                                                        ` : ''}
+                                                        ${it.location ? `
+                                                            <a href="${mapUrl}" target="_blank" class="bg-[#FFF3E0] hover:bg-[#FFE0B2] px-2 py-0.5 rounded-full border border-[#4E342E] font-bold underline">
+                                                                📍 ${escHtml(it.location)}
+                                                            </a>
+                                                        ` : ''}
+                                                        ${it.store ? `
+                                                            <a href="${mapUrl}" target="_blank" class="bg-[#E0F7FA] hover:bg-[#B2EBF2] px-2 py-0.5 rounded-full border border-[#4E342E] font-bold">
+                                                                🏪 ${escHtml(it.store)}
+                                                            </a>
+                                                        ` : ''}
+                                                    </div>
+
+                                                    ${it.notes ? `<div class="text-[11px] text-[#5D4037] mt-1.5 bg-white/80 px-2 py-1 rounded-lg border border-dashed border-amber-300">📝 ${escHtml(it.notes)}</div>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setShopField(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+        function openShopModal(editId = '', presetPerson = '', presetLoc = '') {
+            document.getElementById('editingShopId').value = editId;
+            const people = getAllShopPeople();
+            document.getElementById('shopModalPersonChips').innerHTML = people.map(p => `
+                <button type="button" data-p="${escHtml(p)}" onclick="setShopField('shopPersonInput', this.dataset.p)" class="px-2.5 py-0.5 rounded-full bg-[#FCE4EC] hover:bg-[#F8BBD0] border border-[#4E342E] font-extrabold text-[11px]">
+                    ${p === '大家共用' ? '🤝' : '🧑'} ${escHtml(p)}
+                </button>
+            `).join('');
+
+            if (editId) {
+                const target = (appData.shoppingList || []).find(s => s.id === editId);
+                if (!target) return;
+                document.getElementById('shopModalTitle').textContent = '✏️ 更改購物清單 Item';
+                document.getElementById('shopModalSaveBtn').textContent = '💾 儲存更改';
+                document.getElementById('shopPersonInput').value = target.person || '';
+                document.getElementById('shopLocationInput').value = target.location || '';
+                document.getElementById('shopStoreInput').value = target.store || '';
+                document.getElementById('shopItemInput').value = target.item || '';
+                document.getElementById('shopNotesInput').value = target.notes || '';
+            } else {
+                document.getElementById('shopModalTitle').textContent = '🛍️ 新增購物清單 Item';
+                document.getElementById('shopModalSaveBtn').textContent = '💾 儲存至購物清單';
+                const defaultPerson = presetPerson || (currentShopPersonFilter !== 'ALL' ? currentShopPersonFilter : (appData.members[0] || '我'));
+                document.getElementById('shopPersonInput').value = defaultPerson;
+                document.getElementById('shopLocationInput').value = presetLoc || '';
+                document.getElementById('shopStoreInput').value = '';
+                document.getElementById('shopItemInput').value = '';
+                document.getElementById('shopNotesInput').value = '';
+            }
+            openModal('shopModal');
+        }
+
+        function saveShopModal() {
+            const editId = document.getElementById('editingShopId').value;
+            const person = document.getElementById('shopPersonInput').value.trim() || '大家共用';
+            const location = document.getElementById('shopLocationInput').value.trim();
+            const store = document.getElementById('shopStoreInput').value.trim();
+            const item = document.getElementById('shopItemInput').value.trim();
+            const notes = document.getElementById('shopNotesInput').value.trim();
+
+            if (!item) {
+                showToast('⚠️ 請輸入要買咩 Item！');
+                document.getElementById('shopItemInput').focus();
+                return;
+            }
+
+            if (person !== '大家共用' && !appData.members.includes(person)) {
+                appData.members.push(person);
+            }
+
+            if (!Array.isArray(appData.shoppingList)) appData.shoppingList = [];
+
+            if (editId) {
+                const idx = appData.shoppingList.findIndex(s => s.id === editId);
+                if (idx !== -1) {
+                    appData.shoppingList[idx] = {
+                        ...appData.shoppingList[idx],
+                        person, location, store, item, notes,
+                        itemUpdatedAt: Date.now()
+                    };
+                }
+                closeModal('shopModal');
+                saveData();
+                showToast('✅ 已更新購物清單項目！');
+            } else {
+                appData.shoppingList.push({
+                    id: 'sh-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+                    person, location, store, item, notes,
+                    bought: false,
+                    itemUpdatedAt: Date.now()
+                });
+                closeModal('shopModal');
+                saveData();
+                showToast('🛍️ 已加入購物清單！');
+            }
+        }
+
+        function toggleShopBought(id) {
+            const target = (appData.shoppingList || []).find(s => s.id === id);
+            if (!target) return;
+            target.bought = !target.bought;
+            target.itemUpdatedAt = Date.now();
+            saveData();
+        }
+
+        function requestDeleteShopItem(id) {
+            const target = (appData.shoppingList || []).find(s => s.id === id);
+            if (!target) return;
+            askConfirm('確定刪除呢項購物清單？', `「${target.person}：${target.item}」將會被移除。`, () => {
+                markDeletedId(id);
+                appData.shoppingList = appData.shoppingList.filter(s => s.id !== id);
+                saveData();
+                showToast('🗑️ 已從購物清單刪除！');
+            });
+        }
+
+        function sendShopToExpense(id) {
+            const target = (appData.shoppingList || []).find(s => s.id === id);
+            if (!target) return;
+            target.bought = true;
+            target.itemUpdatedAt = Date.now();
+            saveData();
+
+            switchTab('expenses');
+            resetExpenseForm();
+            document.getElementById('expCategory').value = '🛍️ 購物';
+            const storePrefix = target.store ? `[${target.store}] ` : (target.location ? `[${target.location}] ` : '');
+            document.getElementById('expDesc').value = `${storePrefix}${target.item}`;
+            if (appData.members.includes(target.person)) {
+                document.getElementById('expPayer').value = target.person;
+                document.querySelectorAll('#expSplitCheckboxes input[type="checkbox"]').forEach(cb => {
+                    cb.checked = (cb.value === target.person);
+                });
+            }
+            document.getElementById('expAmount').focus();
+            showToast('💸 已自動填好購物資料，輸入金額就記到帳啦！');
+        }
+
+        // ==================== 8. 多人雲端同步 (防洗資料保護 + 智能合併 + 專屬邀請連結) ====================
         function getCloudConfig() {
             try { return JSON.parse(localStorage.getItem(CLOUD_CFG_KEY)) || {}; } catch { return {}; }
         }
 
-        function getBaseSnapshot() {
-            try {
-                const raw = localStorage.getItem(CLOUD_BASE_KEY);
-                return raw ? JSON.parse(raw) : null;
-            } catch { return null; }
-        }
-
-        function setBaseSnapshot(dataObj) {
-            try {
-                localStorage.setItem(CLOUD_BASE_KEY, JSON.stringify(dataObj));
-            } catch (e) { console.error(e); }
-        }
-
-        // 按 ID 做 3 向智能合併 (保留雲端與本地各自的新增、修改與刪除)
-        function mergeArrayById(cloudArr = [], localArr = [], baseArr = []) {
-            const baseMap = new Map((baseArr || []).map(x => [x.id, JSON.stringify(x)]));
-            const localMap = new Map((localArr || []).map(x => [x.id, x]));
-            const cloudIds = new Set((cloudArr || []).map(x => x.id));
-            const result = [];
-
-            for (const cItem of (cloudArr || [])) {
-                const existedInBase = baseMap.has(cItem.id);
-                const inLocal = localMap.has(cItem.id);
-                if (existedInBase && !inLocal) {
-                    // 本地明確刪除此項目 -> 同步移除
-                    continue;
-                }
-                if (inLocal) {
-                    const localItem = localMap.get(cItem.id);
-                    if (!existedInBase || JSON.stringify(localItem) !== baseMap.get(cItem.id)) {
-                        // 本地對此項目有更新 -> 採用本地更新
-                        result.push(localItem);
-                        continue;
-                    }
-                }
-                // 本地未改動 -> 保留雲端版本 (包括朋友剛剛改的內容)
-                result.push(cItem);
-            }
-
-            // 加入本地新建立的項目
-            for (const lItem of (localArr || [])) {
-                if (!baseMap.has(lItem.id) && !cloudIds.has(lItem.id)) {
-                    result.push(lItem);
-                }
-            }
-            return result;
-        }
-
-        // 合併整份行程資料
-        function mergeAppData(cloud, local, baseSnapshot) {
-            const base = baseSnapshot || DEFAULT_DATA;
-            // 若本地仍是未改動過的初始預設範本 (updatedAt === 0)，100% 採用雲端資料！
-            if (!local.updatedAt) {
-                return JSON.parse(JSON.stringify(cloud));
-            }
-
-            const merged = JSON.parse(JSON.stringify(cloud));
-            merged.updatedAt = Date.now();
-
-            // 匯率合併
-            if (local.thbRate !== base.thbRate) {
-                merged.thbRate = local.thbRate;
-            }
-
-            // 旅伴名單合併
-            const baseMembers = new Set(base.members || []);
-            const localMembers = new Set(local.members || []);
-            const mergedMembers = (cloud.members || []).filter(m => !(baseMembers.has(m) && !localMembers.has(m)));
-            for (const m of (local.members || [])) {
-                if (!baseMembers.has(m) && !mergedMembers.includes(m)) {
-                    mergedMembers.push(m);
-                }
-            }
-            merged.members = mergedMembers.length > 0 ? mergedMembers : ['我'];
-
-            // 每日橫幅簡介合併
-            merged.daysMeta = merged.daysMeta || {};
-            Object.keys(DEFAULT_DATA.daysMeta).forEach(dKey => {
-                const cMeta = (cloud.daysMeta && cloud.daysMeta[dKey]) || DEFAULT_DATA.daysMeta[dKey];
-                const lMeta = (local.daysMeta && local.daysMeta[dKey]) || cMeta;
-                const bMeta = (base.daysMeta && base.daysMeta[dKey]) || DEFAULT_DATA.daysMeta[dKey];
-                merged.daysMeta[dKey] = { ...cMeta };
-                ['theme', 'transportSummary', 'tips'].forEach(field => {
-                    if (lMeta[field] !== bMeta[field]) {
-                        merged.daysMeta[dKey][field] = lMeta[field];
-                    }
-                });
-            });
-
-            // 每日行程時間軸合併 (支援跨日調動與增刪改)
-            merged.itinerary = {};
-            Object.keys(DEFAULT_DATA.daysMeta).forEach(dKey => {
-                merged.itinerary[dKey] = mergeArrayById(
-                    (cloud.itinerary && cloud.itinerary[dKey]) || [],
-                    (local.itinerary && local.itinerary[dKey]) || [],
-                    (base.itinerary && base.itinerary[dKey]) || []
-                );
-            });
-
-            // 待辦清單與支出紀錄合併
-            merged.todos = mergeArrayById(cloud.todos || [], local.todos || [], base.todos || []);
-            merged.expenses = mergeArrayById(cloud.expenses || [], local.expenses || [], base.expenses || []);
-
-            return merged;
-        }
-
         function initCloudUI() {
-            // 檢查網址是否帶有朋友分享的一鍵同步 Hash (#bkk_sync=...)
-            if (window.location.hash && window.location.hash.startsWith('#bkk_sync=')) {
-                try {
-                    const encoded = window.location.hash.replace('#bkk_sync=', '');
-                    const decoded = JSON.parse(decodeURIComponent(atob(encoded)));
-                    if (decoded.k && decoded.b) {
-                        localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey: decoded.k, binId: decoded.b }));
-                        history.replaceState(null, '', window.location.pathname + window.location.search);
-                        showToast('🔗 已透過邀請連結自動連接雲端房間！正在下載最新行程...');
-                    }
-                } catch (e) { console.error('解析同步連結失敗', e); }
-            }
-
             const cfg = getCloudConfig();
             if (cfg.apiKey) document.getElementById('cloudApiKey').value = cfg.apiKey;
             if (cfg.binId) document.getElementById('cloudBinId').value = cfg.binId;
@@ -1658,41 +1964,82 @@
         function updateCloudIndicator(connected) {
             const dot = document.getElementById('cloudDot');
             const refreshBtn = document.getElementById('quickRefreshBtn');
+            const shareBtn = document.getElementById('quickShareBtn');
             if (connected) {
                 dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block border border-[#4E342E]';
                 refreshBtn.classList.remove('hidden');
+                shareBtn.classList.remove('hidden');
             } else {
                 dot.className = 'w-2.5 h-2.5 rounded-full bg-gray-400 inline-block border border-[#4E342E]';
                 refreshBtn.classList.add('hidden');
+                shareBtn.classList.add('hidden');
             }
         }
 
-        // 房主首次建立全新房間
+        // 智能合併兩個版本的陣列（保留雙方新增項目、採用較新修改、過濾已刪除項目）
+        function mergeArrayById(remoteArr = [], localArr = [], deletedSet) {
+            const map = new Map();
+            remoteArr.forEach(item => {
+                if (item && item.id && !deletedSet.has(item.id)) {
+                    map.set(item.id, item);
+                }
+            });
+            localArr.forEach(item => {
+                if (item && item.id && !deletedSet.has(item.id)) {
+                    const existing = map.get(item.id);
+                    if (!existing || (item.itemUpdatedAt || 0) >= (existing.itemUpdatedAt || 0)) {
+                        map.set(item.id, item);
+                    }
+                }
+            });
+            return Array.from(map.values());
+        }
+
+        function smartMergeRecords(remoteRaw, localRaw) {
+            const remote = ensureDataShape(remoteRaw);
+            const local = ensureDataShape(localRaw);
+
+            // 如果本機係全新未改過 (updatedAt === 0)，100% 採用雲端資料！
+            if (!local.updatedAt || local.updatedAt === 0) {
+                return remote;
+            }
+            // 如果雲端係舊/空 (updatedAt === 0)，採用本機資料
+            if (!remote.updatedAt || remote.updatedAt === 0) {
+                return local;
+            }
+
+            const deletedIds = Array.from(new Set([...(remote.deletedIds || []), ...(local.deletedIds || [])])).slice(-300);
+            const deletedSet = new Set(deletedIds);
+
+            const newerIsLocal = (local.updatedAt || 0) >= (remote.updatedAt || 0);
+            const base = JSON.parse(JSON.stringify(newerIsLocal ? local : remote));
+
+            base.deletedIds = deletedIds;
+            base.members = Array.from(new Set([...(remote.members || []), ...(local.members || [])]));
+            base.todos = mergeArrayById(remote.todos, local.todos, deletedSet);
+            base.expenses = mergeArrayById(remote.expenses, local.expenses, deletedSet);
+            base.shoppingList = mergeArrayById(remote.shoppingList, local.shoppingList, deletedSet);
+
+            const allDays = new Set([...Object.keys(remote.itinerary || {}), ...Object.keys(local.itinerary || {})]);
+            base.itinerary = {};
+            allDays.forEach(d => {
+                base.itinerary[d] = mergeArrayById(remote.itinerary?.[d] || [], local.itinerary?.[d] || [], deletedSet);
+            });
+
+            base.updatedAt = Math.max(remote.updatedAt || 0, local.updatedAt || 0, Date.now());
+            return base;
+        }
+
         async function createCloudRoom() {
             const apiKey = document.getElementById('cloudApiKey').value.trim();
-            const existingBin = document.getElementById('cloudBinId').value.trim();
             if (!apiKey) {
                 showToast('⚠️ 請先貼上 JSONBin 的 X-Master-Key！');
                 return;
             }
-            if (existingBin) {
-                askConfirm(
-                    '已經填咗房間 Bin ID 喎！',
-                    '如果你係朋友加入現有房間，請撳「取消」然後撳上面綠色掣「加入房間並下載」！確定要開一個全新房間嗎？',
-                    () => doCreateCloudRoom(apiKey),
-                    '🆕',
-                    '照開新房間'
-                );
-                return;
-            }
-            await doCreateCloudRoom(apiKey);
-        }
-
-        async function doCreateCloudRoom(apiKey) {
             const msgEl = document.getElementById('cloudStatusMsg');
-            msgEl.textContent = '⏳ 正在建立全新雲端共用房間...';
+            msgEl.textContent = '⏳ 正在建立雲端共用房間...';
             try {
-                appData.updatedAt = Date.now();
+                if (!appData.updatedAt) appData.updatedAt = Date.now();
                 const res = await fetch('https://api.jsonbin.io/v3/b', {
                     method: 'POST',
                     headers: {
@@ -1704,13 +2051,12 @@
                 });
                 const data = await res.json();
                 if (data.metadata && data.metadata.id) {
-                    const newBinId = data.metadata.id;
-                    document.getElementById('cloudBinId').value = newBinId;
-                    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey, binId: newBinId }));
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                    setBaseSnapshot(appData);
+                    const binId = data.metadata.id;
+                    document.getElementById('cloudBinId').value = binId;
+                    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey, binId }));
+                    lastCloudSyncedAt = appData.updatedAt;
                     updateCloudIndicator(true);
-                    msgEl.textContent = `✅ 房間建立成功 (${newBinId})！快啲撳「📲 複製邀請連結 / 房號」發俾旅伴啦！`;
+                    msgEl.textContent = `✅ 房間建立成功！請即撳右邊「📲 複製朋友專屬同步連結」發去 WhatsApp！`;
                     showToast('☁️ 雲端共用房間已建立！');
                 } else {
                     msgEl.textContent = '❌ 建立失敗，請檢查 API Key 是否正確。';
@@ -1720,93 +2066,97 @@
             }
         }
 
-        // 旅伴加入房間主按鈕：只儲存設定並下載雲端最新資料 (絕不覆蓋雲端！)
+        // 安全連接現有房間：永遠先下載雲端資料，絕不直接覆蓋！
         async function connectAndPullCloud() {
             const apiKey = document.getElementById('cloudApiKey').value.trim();
             const binId = document.getElementById('cloudBinId').value.trim();
             if (!apiKey || !binId) {
-                showToast('⚠️ 請貼上房主發俾你嘅 X-Master-Key 同埋房間 Bin ID！');
+                showToast('⚠️ 請填寫 API Key 及共用房間 Bin ID！');
                 return;
             }
+            const msgEl = document.getElementById('cloudStatusMsg');
+            msgEl.textContent = '⏳ 正在連接房間並安全載入雲端最新資料...';
+
             localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey, binId }));
             updateCloudIndicator(true);
-            document.getElementById('cloudStatusMsg').textContent = '⏳ 正在連接房間並安全下載最新行程...';
+
             const ok = await pullFromCloud(true, true);
             if (ok) {
-                document.getElementById('cloudStatusMsg').textContent = '🎉 成功加入房間並下載咗最新行程！而家大家改嘢會自動同步啦！';
+                msgEl.textContent = '✅ 已成功連接並載入雲端最新資料！你而家改任何嘢都會即時同步！';
+            } else {
+                msgEl.textContent = '❌ 讀取失敗，請確認 Bin ID 與 X-Master-Key 是否正確。';
             }
         }
 
-        // 一鍵複製邀請連結 / 房號資訊俾朋友
-        function copyShareInvite() {
-            const apiKey = document.getElementById('cloudApiKey').value.trim() || getCloudConfig().apiKey;
-            const binId = document.getElementById('cloudBinId').value.trim() || getCloudConfig().binId;
+        // 複製朋友專屬同步連結（用 URL Hash 傳遞，唔經伺服器 Log，朋友一開即連即下載）
+        function copySyncInviteLink() {
+            const cfg = getCloudConfig();
+            const apiKey = (document.getElementById('cloudApiKey')?.value || cfg.apiKey || '').trim();
+            const binId = (document.getElementById('cloudBinId')?.value || cfg.binId || '').trim();
             if (!apiKey || !binId) {
-                showToast('⚠️ 請先連接或建立雲端房間，先可以複製邀請資訊！');
+                openModal('syncModal');
+                showToast('⚠️ 請先設定好房間再複製邀請連結！');
                 return;
             }
-            const token = btoa(encodeURIComponent(JSON.stringify({ k: apiKey, b: binId })));
-            const isWebHosted = window.location.protocol.startsWith('http');
+            const payload = btoa(encodeURIComponent(JSON.stringify({ k: apiKey, b: binId })));
             const baseUrl = window.location.href.split('#')[0];
-
-            let shareText = `🇹🇭【曼谷 City Break 2026 多人同步邀請】\n`;
-            if (isWebHosted) {
-                shareText += `👉 直接撳呢條專屬連結打開，就會自動連入房間並下載最新行程（唔使自己貼 Key！）：\n${baseUrl}#bkk_sync=${token}\n\n`;
-            }
-            shareText += `🔑 如手動輸入設定（貼落「多人同步」視窗後撳綠色掣「加入房間並下載」）：\n• X-Master-Key：${apiKey}\n• 房間 Bin ID：${binId}`;
-
-            navigator.clipboard.writeText(shareText).then(() => {
-                showToast('📲 已複製邀請連結及房號！快啲貼去 WhatsApp 俾旅伴啦！');
+            const inviteUrl = `${baseUrl}#bkk_sync=${payload}`;
+            navigator.clipboard.writeText(inviteUrl).then(() => {
+                showToast('📲 專屬同步連結已複製！Send 去 WhatsApp 俾朋友一撳即自動同步！');
             });
         }
 
-        // 排程上傳（防連撳衝突）
-        function schedulePushToCloud() {
-            const cfg = getCloudConfig();
-            if (!cfg.apiKey || !cfg.binId) return;
-            clearTimeout(pushTimer);
-            pushTimer = setTimeout(() => pushToCloud(false), 450);
+        // 進階：強制覆蓋雲端（需二次確認）
+        function confirmForceOverwriteCloud() {
+            const apiKey = document.getElementById('cloudApiKey').value.trim();
+            const binId = document.getElementById('cloudBinId').value.trim();
+            if (!apiKey || !binId) {
+                showToast('⚠️ 請先填寫 API Key 同 Bin ID！');
+                return;
+            }
+            askConfirm(
+                '⚠️ 確定強制覆蓋雲端資料？',
+                '雲端入面旅伴改過嘅內容將會被你目前畫面嘅資料完全取代。一般情況請用「連接房間並下載最新資料」。',
+                async () => {
+                    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey, binId }));
+                    updateCloudIndicator(true);
+                    appData.updatedAt = Date.now();
+                    await pushToCloud(true, true);
+                }
+            );
         }
 
-        // 智能安全上傳：先拉取雲端最新版本檢查並合併，絕不洗走旅伴改動
-        async function pushToCloud(showMsg = false) {
+        async function pushToCloud(showMsg = false, forceOverwrite = false) {
             const cfg = getCloudConfig();
-            if (!cfg.apiKey || !cfg.binId) return;
+            if (!cfg.apiKey || !cfg.binId || isCloudBusy) return;
 
-            // 防呆鎖：如果本地係未改過嘅初始預設檔，禁止自動上傳覆蓋雲端！改為下載雲端
-            if (!appData.updatedAt) {
+            // 防呆保護：如果本機係從未改動過嘅預設資料，絕不自動覆蓋雲端！
+            if (!forceOverwrite && (!appData.updatedAt || appData.updatedAt === 0)) {
                 await pullFromCloud(false);
                 return;
             }
 
-            if (isCloudBusy) {
-                schedulePushToCloud();
-                return;
-            }
             isCloudBusy = true;
             try {
-                // Step 1: 上傳前先讀取雲端最新狀態 (禁快取)
-                const getRes = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
-                    cache: 'no-store',
-                    headers: { 'X-Master-Key': cfg.apiKey }
-                });
-                if (getRes.ok) {
-                    const getJson = await getRes.json();
-                    const cloudRecord = getJson && getJson.record;
-                    const base = getBaseSnapshot();
-
-                    // 若雲端已有其他旅伴改過，先執行 3 向智能合併
-                    if (cloudRecord && cloudRecord.itinerary) {
-                        const cloudChanged = !base || (cloudRecord.updatedAt && cloudRecord.updatedAt !== base.updatedAt);
-                        if (cloudChanged) {
-                            appData = mergeAppData(cloudRecord, appData, base || DEFAULT_DATA);
+                // 上傳前先檢查雲端係咪有旅伴剛剛更新過，若有則自動合併雙方改動！
+                if (!forceOverwrite) {
+                    const checkRes = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
+                        headers: { 'X-Master-Key': cfg.apiKey }
+                    });
+                    if (checkRes.ok) {
+                        const checkJson = await checkRes.json();
+                        if (checkJson && checkJson.record) {
+                            const remote = ensureDataShape(checkJson.record);
+                            if ((remote.updatedAt || 0) > lastCloudSyncedAt) {
+                                appData = smartMergeRecords(remote, appData);
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                                renderAll();
+                            }
                         }
                     }
                 }
 
-                // Step 2: 上傳合併後的完整最新資料
-                appData.updatedAt = Date.now();
-                const putRes = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1814,14 +2164,12 @@
                     },
                     body: JSON.stringify(appData)
                 });
-                if (putRes.ok) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                    setBaseSnapshot(appData);
-                    renderAll();
-                    document.getElementById('saveStatus').textContent = '☁️ 已智能雲端同步';
+                if (res.ok) {
+                    lastCloudSyncedAt = appData.updatedAt;
+                    document.getElementById('saveStatus').textContent = '☁️ 已安全雲端同步';
                     if (showMsg) {
                         document.getElementById('cloudStatusMsg').textContent = '✅ 已成功同步至雲端！';
-                        showToast('☁️ 資料已安全同步至雲端！');
+                        showToast('☁️ 資料已安全同步至多人雲端！');
                     }
                 }
             } catch (e) {
@@ -1831,100 +2179,59 @@
             }
         }
 
-        // 從雲端下載最新資料 (支援直接讀取輸入框設定 + 本地未同步改動合併)
-        async function pullFromCloud(notify = false, forceTakeCloud = false) {
-            let cfg = getCloudConfig();
-            const inputKey = document.getElementById('cloudApiKey')?.value.trim();
-            const inputBin = document.getElementById('cloudBinId')?.value.trim();
-            if ((!cfg.apiKey || !cfg.binId) && inputKey && inputBin) {
-                cfg = { apiKey: inputKey, binId: inputBin };
-                localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify(cfg));
-                updateCloudIndicator(true);
-            }
-            if (!cfg.apiKey || !cfg.binId) return false;
-
-            if (isCloudBusy) return false;
+        async function pullFromCloud(notify = false, preferCloudOnFirstConnect = false) {
+            const cfg = getCloudConfig();
+            if (!cfg.apiKey || !cfg.binId || isCloudBusy) return false;
             isCloudBusy = true;
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
-                    cache: 'no-store',
                     headers: { 'X-Master-Key': cfg.apiKey }
                 });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const json = await res.json();
-                if (json && json.record && json.record.itinerary) {
-                    const cloudRecord = json.record;
-                    const base = getBaseSnapshot();
-
-                    if (forceTakeCloud || !appData.updatedAt || !base) {
-                        // 新加入房間或未曾修改過：直接採用雲端最新資料
-                        appData = cloudRecord;
-                        setBaseSnapshot(cloudRecord);
-                        saveData(true);
-                    } else {
-                        const hasLocalUnsynced = JSON.stringify(appData) !== JSON.stringify(base);
-                        if (hasLocalUnsynced && cloudRecord.updatedAt !== base.updatedAt) {
-                            appData = mergeAppData(cloudRecord, appData, base);
-                            setBaseSnapshot(cloudRecord);
-                            saveData(false); // 將合併結果推回雲端
-                        } else if (!hasLocalUnsynced) {
-                            appData = cloudRecord;
-                            setBaseSnapshot(cloudRecord);
-                            saveData(true);
-                        }
+                if (json && json.record) {
+                    const remote = ensureDataShape(json.record);
+                    if (preferCloudOnFirstConnect || !appData.updatedAt || appData.updatedAt === 0) {
+                        // 新機首次連接房間：直接完整採用雲端資料，保證唔會洗走任何嘢！
+                        appData = remote;
+                    } else if ((remote.updatedAt || 0) > (appData.updatedAt || 0)) {
+                        appData = smartMergeRecords(remote, appData);
                     }
+                    lastCloudSyncedAt = appData.updatedAt || Date.now();
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                    document.getElementById('saveStatus').textContent = '☁️ 已同步雲端最新';
+                    renderAll();
                     if (notify) showToast('🔄 已同步旅伴的最新改動！');
                     return true;
-                } else {
-                    if (notify) showToast('❌ 找不到房間資料，請檢查 Bin ID 是否正確。');
-                    return false;
                 }
             } catch (e) {
-                if (notify) showToast('❌ 同步失敗，請檢查網絡或 API Key。');
-                return false;
+                if (notify) showToast('❌ 同步失敗，請檢查網絡或雲端 Key / Bin ID。');
             } finally {
                 isCloudBusy = false;
             }
+            return false;
         }
 
-        // 進階修復：經確認後強制以目前畫面覆蓋雲端
-        function forceOverwriteCloud() {
-            const apiKey = document.getElementById('cloudApiKey').value.trim();
-            const binId = document.getElementById('cloudBinId').value.trim();
-            if (!apiKey || !binId) {
-                showToast('⚠️ 請先填妥 API Key 及房間 Bin ID！');
-                return;
+        // 檢查網址係咪帶有 #bkk_sync= 專屬邀請碼
+        async function checkUrlSyncInvite() {
+            const hash = window.location.hash || '';
+            if (!hash.startsWith('#bkk_sync=')) return false;
+            try {
+                const encoded = hash.replace('#bkk_sync=', '');
+                const parsed = JSON.parse(decodeURIComponent(atob(encoded)));
+                if (parsed && parsed.k && parsed.b) {
+                    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey: parsed.k, binId: parsed.b }));
+                    // 清除網址列上嘅密碼 Hash，乾淨又安全
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                    initCloudUI();
+                    showToast('⏳ 偵測到旅伴同步連結，正在下載最新行程...');
+                    await pullFromCloud(true, true);
+                    return true;
+                }
+            } catch (e) {
+                console.error('Invalid sync hash', e);
             }
-            askConfirm(
-                '確定強制覆蓋雲端？',
-                '呢個操作會用你「目前畫面見到嘅內容」直接取代雲端上面嘅版本（適合房主修復或還原備份時使用）。',
-                async () => {
-                    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ apiKey, binId }));
-                    updateCloudIndicator(true);
-                    appData.updatedAt = Date.now();
-                    try {
-                        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Master-Key': apiKey
-                            },
-                            body: JSON.stringify(appData)
-                        });
-                        if (res.ok) {
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                            setBaseSnapshot(appData);
-                            document.getElementById('cloudStatusMsg').textContent = '✅ 已強制將目前畫面內容覆蓋至雲端！';
-                            showToast('⬆️ 已成功將目前畫面覆蓋至雲端！');
-                        } else {
-                            showToast('❌ 上傳失敗，請檢查 API Key 及 Bin ID。');
-                        }
-                    } catch (e) {
-                        showToast('❌ 網絡錯誤：' + e.message);
-                    }
-                },
-                '⬆️',
-                '確定覆蓋雲端'
-            );
+            return false;
         }
 
         function exportJsonFile() {
@@ -1932,7 +2239,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `曼谷行程備份_${new Date().toISOString().slice(0, 10)}.json`;
+            a.download = `曼谷行程購物備份_${new Date().toISOString().slice(0, 10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -1945,12 +2252,10 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported.itinerary && imported.todos) {
-                        appData = imported;
-                        appData.updatedAt = Date.now();
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                        renderAll();
+                        appData = ensureDataShape(imported);
+                        saveData();
                         closeModal('syncModal');
-                        showToast('🎉 成功讀取備份檔！（如需覆蓋雲端可到同步視窗按強制覆蓋）');
+                        showToast('🎉 成功匯入旅伴的行程、購物清單與支出紀錄！');
                     } else {
                         showToast('❌ 檔案格式不正確！');
                     }
@@ -1962,13 +2267,13 @@
         function confirmResetDefault() {
             askConfirm(
                 '確定重設回初始行程？',
-                '只會還原你部機畫面為最初預設行程（唔會自動洗走雲端房間，除非你再手動撳強制覆蓋）。',
+                '將會還原為最初 Bangkok.xlsx 的預設行程表，本機自行新增的紀錄將會被清除。',
                 () => {
                     appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                    renderAll();
+                    appData.updatedAt = Date.now();
+                    saveData();
                     closeModal('syncModal');
-                    showToast('🔄 已重設本機為預設曼谷行程！');
+                    showToast('🔄 已重設為預設曼谷行程！');
                 }
             );
         }
@@ -1985,18 +2290,30 @@
             el.classList.remove('flex');
         }
 
-        // 啟動初始化 & 切換視窗自動拉取最新資料
-        window.addEventListener('DOMContentLoaded', () => {
+        function hasAnyModalOpen() {
+            return ['spotModal', 'dayMetaModal', 'confirmModal', 'syncModal', 'shopModal'].some(id => {
+                const el = document.getElementById(id);
+                return el && !el.classList.contains('hidden');
+            });
+        }
+
+        // 啟動初始化
+        window.addEventListener('DOMContentLoaded', async () => {
             initCloudUI();
             renderAll();
-            pullFromCloud(false);
-        });
-
-        // 當手機/電腦切返轉頭打開呢個 Tab 時，自動靜默拉取旅伴最新改動
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                pullFromCloud(false);
+            const fromInvite = await checkUrlSyncInvite();
+            if (!fromInvite) {
+                await pullFromCloud(false, false);
             }
+
+            // 背景每 25 秒自動拉取旅伴最新改動（當無彈窗開啟且無輸入框打字中）
+            setInterval(() => {
+                const activeTag = document.activeElement?.tagName;
+                const isTyping = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT';
+                if (!document.hidden && !hasAnyModalOpen() && !isTyping) {
+                    pullFromCloud(false, false);
+                }
+            }, 25000);
         });
     </script>
 </body>
